@@ -1,0 +1,1800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ResearchAI — Document & Research Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>
+/* ── Reset & Base ─────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #f5f5f3;
+  --surface:   #ffffff;
+  --surface2:  #f0f0ee;
+  --surface3:  #e8e8e6;
+  --border:    #e2e2e0;
+  --border2:   #c8c8c6;
+  --text:      #1c1c1a;
+  --text2:     #555553;
+  --text3:     #999997;
+  --ink:       #1c1c1a;
+  --link:      #2563eb;
+  --green:     #16a34a;
+  --amber:     #b45309;
+  --red:       #dc2626;
+  --mono:      'JetBrains Mono', 'Courier New', monospace;
+  --r:         5px;
+  --r-lg:      8px;
+  --shadow:    0 1px 3px rgba(0,0,0,0.06);
+}
+
+html, body { height: 100%; overflow: hidden; }
+
+body {
+  font-family: 'Inter', -apple-system, system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+}
+
+button { font-family: inherit; cursor: pointer; }
+input, textarea { font-family: inherit; }
+a { color: var(--link); }
+
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* ── Top Bar ──────────────────────────────────────── */
+#topbar {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  height: 44px;
+  padding: 0 0 0 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 200;
+}
+
+.brand {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  color: var(--text);
+  margin-right: 20px;
+  white-space: nowrap;
+}
+.brand sub {
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--text3);
+  letter-spacing: 0;
+  vertical-align: baseline;
+}
+
+.tb-sep { width: 1px; height: 20px; background: var(--border); margin: 0 12px; }
+
+.model-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  background: transparent;
+  font-size: 12px;
+  color: var(--text2);
+  transition: all 0.12s;
+  white-space: nowrap;
+}
+.model-btn:hover { border-color: var(--border2); color: var(--text); background: var(--surface2); }
+
+.model-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--ink);
+  flex-shrink: 0;
+}
+.model-dot.gemini { background: #4285f4; }
+.model-dot.groq   { background: #f55036; }
+
+.chevron { font-size: 10px; color: var(--text3); margin-left: 2px; }
+
+#modelDropdown {
+  display: none;
+  position: absolute;
+  top: 48px;
+  left: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: var(--r-lg);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  z-index: 999;
+  min-width: 230px;
+  overflow: hidden;
+}
+#modelDropdown.open { display: block; }
+
+.dropdown-header {
+  padding: 9px 12px 7px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text3);
+  border-bottom: 1px solid var(--border);
+}
+
+.model-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 9px 12px;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.model-option:hover { background: var(--surface2); }
+.model-option.selected { background: var(--surface2); }
+.model-option .model-dot { margin-top: 3px; }
+.model-option-name { font-size: 12px; font-weight: 500; color: var(--text); }
+.model-option-desc { font-size: 11px; color: var(--text3); margin-top: 1px; }
+
+.dropdown-footer {
+  padding: 8px 12px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text3);
+  line-height: 1.4;
+}
+
+.tb-spacer { flex: 1; }
+
+.tb-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  height: 44px;
+  border: none;
+  border-left: 1px solid var(--border);
+  border-radius: 0;
+  background: transparent;
+  font-size: 12px;
+  color: var(--text2);
+  transition: all 0.12s;
+  white-space: nowrap;
+}
+.tb-btn:hover { background: var(--surface2); color: var(--text); }
+.tb-btn.on { background: var(--surface2); color: var(--text); font-weight: 500; }
+.tb-btn svg { flex-shrink: 0; }
+
+/* ── Layout ───────────────────────────────────────── */
+#layout {
+  display: grid;
+  grid-template-columns: 196px 1fr 252px;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ── Left Sidebar ─────────────────────────────────── */
+#sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.sb-group { padding: 14px 10px 8px; }
+.sb-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text3);
+  padding: 0 6px;
+  margin-bottom: 5px;
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 8px;
+  border: none;
+  border-radius: var(--r);
+  background: transparent;
+  font-size: 12px;
+  color: var(--text2);
+  text-align: left;
+  transition: all 0.1s;
+  margin-bottom: 1px;
+}
+.nav-btn:hover { background: var(--surface2); color: var(--text); }
+.nav-btn.active {
+  background: var(--surface3);
+  color: var(--text);
+  font-weight: 500;
+}
+.nav-btn svg { flex-shrink: 0; opacity: 0.7; }
+.nav-btn.active svg { opacity: 1; }
+
+.sb-divider { height: 1px; background: var(--border); margin: 4px 10px; }
+
+.ctx-card {
+  margin: 8px 10px;
+  padding: 9px 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+}
+.ctx-card-title { font-size: 11px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+.ctx-card-desc  { font-size: 11px; color: var(--text3); line-height: 1.45; }
+
+.sb-settings { padding: 10px; }
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 4px;
+  font-size: 11px;
+  color: var(--text2);
+}
+
+.toggle {
+  position: relative;
+  width: 28px; height: 15px;
+  background: var(--border2);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+.toggle.on { background: var(--ink); }
+.toggle::after {
+  content: '';
+  position: absolute;
+  width: 11px; height: 11px;
+  background: #fff;
+  border-radius: 50%;
+  top: 2px; left: 2px;
+  transition: left 0.15s;
+}
+.toggle.on::after { left: 15px; }
+
+.sb-bottom {
+  margin-top: auto;
+  padding: 10px;
+  border-top: 1px solid var(--border);
+}
+.sb-version { font-size: 10px; color: var(--text3); text-align: center; }
+
+/* ── Main Area ────────────────────────────────────── */
+#main {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+/* Sub-mode bar */
+#modebar {
+  display: flex;
+  align-items: center;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  padding: 0 16px;
+}
+.mode-tab {
+  padding: 10px 12px;
+  font-size: 12px;
+  color: var(--text3);
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  transition: all 0.1s;
+  margin-bottom: -1px;
+  white-space: nowrap;
+}
+.mode-tab:hover { color: var(--text2); }
+.mode-tab.active { color: var(--text); font-weight: 500; border-bottom-color: var(--text); }
+
+/* Chat scroll */
+#chatScroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 28px 28px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Empty state */
+#emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 48px 24px 24px;
+  gap: 6px;
+}
+.empty-title { font-size: 15px; font-weight: 500; color: var(--text); }
+.empty-sub { font-size: 12px; color: var(--text3); max-width: 320px; line-height: 1.55; margin-bottom: 4px; }
+
+.starter-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  width: 100%;
+  max-width: 460px;
+  margin-top: 8px;
+}
+.starter-card {
+  padding: 11px 13px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.12s;
+}
+.starter-card:hover { border-color: var(--border2); background: var(--surface2); }
+.starter-card strong { display: block; font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+.starter-card span { font-size: 11px; color: var(--text3); line-height: 1.4; }
+
+/* Messages */
+.msg { display: flex; gap: 11px; }
+.msg.user { flex-direction: row-reverse; }
+
+.msg-av {
+  width: 26px; height: 26px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 600;
+  flex-shrink: 0;
+  color: var(--text3);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  letter-spacing: 0;
+}
+.msg-av.ai {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.msg-body { flex: 1; min-width: 0; }
+
+.msg-header {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 5px;
+}
+.msg-name { font-size: 11px; font-weight: 500; color: var(--text); }
+.msg-time { font-size: 11px; color: var(--text3); }
+.msg-tag {
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text3);
+}
+
+.user-bubble {
+  display: inline-block;
+  max-width: 520px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 9px 13px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--text);
+}
+
+.ai-content {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text);
+}
+.ai-content p { margin: 0 0 9px; }
+.ai-content p:last-child { margin-bottom: 0; }
+.ai-content h1,.ai-content h2 { font-size: 14px; font-weight: 600; margin: 14px 0 5px; }
+.ai-content h3 { font-size: 13px; font-weight: 600; margin: 10px 0 4px; }
+.ai-content ul, .ai-content ol { padding-left: 18px; margin: 4px 0 9px; }
+.ai-content li { margin: 3px 0; }
+.ai-content strong { font-weight: 600; }
+.ai-content em { font-style: italic; }
+.ai-content code {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 1px 5px;
+}
+.ai-content pre {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 11px 13px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  overflow-x: auto;
+  margin: 6px 0 10px;
+}
+.ai-content pre code { background: none; border: none; padding: 0; }
+.ai-content blockquote {
+  border-left: 3px solid var(--border2);
+  padding: 4px 0 4px 12px;
+  color: var(--text2);
+  margin: 8px 0;
+}
+.ai-content table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  margin: 8px 0 12px;
+}
+.ai-content th {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 6px 10px;
+  text-align: left;
+  font-weight: 500;
+}
+.ai-content td {
+  border: 1px solid var(--border);
+  padding: 6px 10px;
+}
+.ai-content tr:nth-child(even) td { background: var(--surface2); }
+.ai-content hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 12px 0;
+}
+
+/* Workflow trace */
+.trace-block {
+  margin-top: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+.trace-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text2);
+  cursor: pointer;
+  user-select: none;
+}
+.trace-body { padding: 8px 10px; display: flex; flex-direction: column; gap: 7px; }
+
+.trace-step { display: flex; align-items: flex-start; gap: 9px; font-size: 11px; }
+.step-badge {
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+  background: var(--surface3);
+  color: var(--text2);
+  border: 1px solid var(--border);
+}
+.step-badge.done { background: var(--ink); color: #fff; border-color: var(--ink); }
+.step-info { flex: 1; }
+.step-label { font-weight: 500; color: var(--text); }
+.step-detail { color: var(--text3); margin-top: 1px; }
+.step-time { font-family: var(--mono); font-size: 10px; color: var(--text3); flex-shrink: 0; margin-top: 1px; }
+
+/* Source tags */
+.source-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 9px; }
+.source-tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.1s;
+}
+.source-tag:hover { border-color: var(--border2); color: var(--text); }
+
+/* Actions on AI message */
+.msg-actions {
+  display: flex;
+  gap: 4px;
+  margin-top: 8px;
+}
+.msg-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  font-size: 11px;
+  color: var(--text3);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: transparent;
+  transition: all 0.1s;
+}
+.msg-action-btn:hover { border-color: var(--border2); color: var(--text2); background: var(--surface2); }
+
+/* Typing */
+.typing-row { display: flex; gap: 11px; }
+.typing-bubble {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 9px 13px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  font-size: 12px;
+  color: var(--text3);
+}
+.typing-dots span {
+  display: inline-block;
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--text3);
+  animation: bounce 1.2s ease infinite;
+}
+.typing-dots span:nth-child(2) { animation-delay: 0.15s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes bounce {
+  0%,60%,100% { transform: translateY(0); }
+  30% { transform: translateY(-4px); }
+}
+
+/* ── Input Area ───────────────────────────────────── */
+#inputArea {
+  padding: 12px 16px 14px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.input-frame {
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  background: var(--bg);
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+.input-frame:focus-within { border-color: var(--border2); }
+
+.input-topbar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+}
+
+.input-chip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  font-size: 11px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: var(--surface);
+  color: var(--text2);
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.1s;
+}
+.input-chip:hover { border-color: var(--border2); color: var(--text); }
+.input-chip.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+.chip-sep { flex: 1; }
+
+#userInput {
+  display: block;
+  width: 100%;
+  min-height: 40px;
+  max-height: 120px;
+  padding: 10px 13px;
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.5;
+}
+#userInput::placeholder { color: var(--text3); }
+
+.input-footer {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  gap: 8px;
+  border-top: 1px solid var(--border);
+}
+.char-count { font-size: 10px; color: var(--text3); font-family: var(--mono); }
+.input-hint { font-size: 11px; color: var(--text3); flex: 1; }
+
+#sendBtn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 14px;
+  background: var(--ink);
+  color: #fff;
+  border: none;
+  border-radius: var(--r);
+  font-size: 12px;
+  font-weight: 500;
+  transition: opacity 0.12s;
+}
+#sendBtn:hover { opacity: 0.85; }
+#sendBtn:disabled { opacity: 0.3; cursor: default; }
+
+/* ── Right Panel ──────────────────────────────────── */
+#rightPanel {
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.rp-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+}
+.rp-tab {
+  flex: 1;
+  padding: 9px 0;
+  font-size: 11px;
+  font-weight: 500;
+  text-align: center;
+  color: var(--text3);
+  border: none;
+  background: transparent;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all 0.1s;
+}
+.rp-tab:hover { color: var(--text2); }
+.rp-tab.active { color: var(--text); border-bottom-color: var(--text); }
+
+.rp-body { flex: 1; overflow-y: auto; padding: 13px; }
+
+.rp-section { margin-bottom: 16px; }
+.rp-section-title {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text3);
+  margin-bottom: 8px;
+}
+
+.stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.stat-cell {
+  padding: 9px 10px;
+  background: var(--surface2);
+  border-radius: var(--r);
+}
+.stat-num {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--text);
+  font-family: var(--mono);
+  letter-spacing: -0.5px;
+}
+.stat-label { font-size: 10px; color: var(--text3); margin-top: 2px; }
+
+.model-info-card {
+  padding: 9px 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+}
+.model-info-name { font-size: 12px; font-weight: 500; color: var(--text); }
+.model-info-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
+
+.key-input-wrap label {
+  display: block;
+  font-size: 11px;
+  color: var(--text2);
+  margin-bottom: 5px;
+  line-height: 1.5;
+}
+.key-input-row { display: flex; gap: 5px; }
+.key-input {
+  flex: 1;
+  padding: 5px 8px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  background: var(--surface2);
+  color: var(--text);
+  outline: none;
+  font-family: var(--mono);
+}
+.key-input:focus { border-color: var(--border2); }
+.key-save-btn {
+  padding: 5px 10px;
+  font-size: 11px;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  background: var(--surface2);
+  color: var(--text2);
+  transition: all 0.1s;
+}
+.key-save-btn:hover { border-color: var(--border2); color: var(--text); }
+.key-note { font-size: 10px; color: var(--text3); margin-top: 5px; line-height: 1.4; }
+
+.doc-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 9px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  margin-bottom: 6px;
+}
+.doc-icon { font-size: 15px; margin-top: 1px; flex-shrink: 0; }
+.doc-name { font-size: 12px; font-weight: 500; color: var(--text); }
+.doc-meta { font-size: 10px; color: var(--text3); margin-top: 2px; }
+.doc-remove {
+  margin-left: auto;
+  padding: 2px 6px;
+  font-size: 11px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: transparent;
+  color: var(--text3);
+  flex-shrink: 0;
+}
+.doc-remove:hover { border-color: var(--red); color: var(--red); }
+
+.drop-zone {
+  border: 1.5px dashed var(--border);
+  border-radius: var(--r);
+  padding: 18px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.drop-zone:hover { border-color: var(--border2); background: var(--surface2); }
+.drop-zone-icon { font-size: 20px; margin-bottom: 5px; opacity: 0.5; }
+.drop-zone-text { font-size: 11px; color: var(--text3); line-height: 1.5; }
+
+.history-item {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+.history-item:last-child { border-bottom: none; }
+.history-item:hover .history-q { color: var(--text); }
+.history-q {
+  font-size: 12px;
+  color: var(--text2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 2px;
+  transition: color 0.1s;
+}
+.history-meta { font-size: 10px; color: var(--text3); }
+
+/* ── Notification toast ───────────────────────────── */
+#toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  background: var(--ink);
+  color: #fff;
+  padding: 7px 16px;
+  border-radius: var(--r);
+  font-size: 12px;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s;
+  z-index: 9999;
+}
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── Icons (inline SVG helpers) ───────────────────── */
+.ico { display: inline-flex; align-items: center; }
+</style>
+</head>
+<body>
+
+<!-- Top Bar -->
+<div id="topbar">
+  <div class="brand">ResearchAI <sub>/ workspace</sub></div>
+
+  <button class="model-btn" id="modelBtn" onclick="toggleDropdown()">
+    <div class="model-dot groq" id="modelDot"></div>
+    <span id="modelLabel">Llama 3.3 70B</span>
+    <span class="chevron">▾</span>
+  </button>
+
+  <!-- Model Dropdown -->
+  <div id="modelDropdown">
+    <div class="dropdown-header">Select model</div>
+    <div class="model-option" data-id="claude-sonnet-4-6" data-name="Claude Sonnet 4.6" data-provider="claude" onclick="selectModel(this)">
+      <div class="model-dot"></div>
+      <div>
+        <div class="model-option-name">Claude Sonnet 4.6</div>
+        <div class="model-option-desc">Anthropic — needs Vercel deploy</div>
+      </div>
+    </div>
+    <div class="model-option selected" data-id="llama-3.3-70b-versatile" data-name="Llama 3.3 70B" data-provider="groq" onclick="selectModel(this)">
+      <div class="model-dot groq"></div>
+      <div>
+        <div class="model-option-name">Llama 3.3 70B</div>
+        <div class="model-option-desc">Groq — free, fast, powerful</div>
+      </div>
+    </div>
+    <div class="model-option" data-id="mixtral-8x7b-32768" data-name="Mixtral 8x7B" data-provider="groq" onclick="selectModel(this)">
+      <div class="model-dot groq"></div>
+      <div>
+        <div class="model-option-name">Mixtral 8x7B</div>
+        <div class="model-option-desc">Groq — free, long context</div>
+      </div>
+    </div>
+    <div class="model-option" data-id="gemma2-9b-it" data-name="Gemma 2 9B" data-provider="groq" onclick="selectModel(this)">
+      <div class="model-dot groq"></div>
+      <div>
+        <div class="model-option-name">Gemma 2 9B</div>
+        <div class="model-option-desc">Groq — free, Google model</div>
+      </div>
+    </div>
+    <div class="dropdown-footer">Groq is 100% free · Add your gsk_ key in Stats panel →</div>
+  </div>
+
+  <div class="tb-spacer"></div>
+
+  <button class="tb-btn on" id="webBtn" onclick="toggleWeb()" title="Toggle live web search">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20"/></svg>
+    Web search
+  </button>
+
+  <button class="tb-btn" onclick="triggerUpload()" title="Attach a document">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66L9.41 16.41a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+    Attach
+  </button>
+
+  <button class="tb-btn" onclick="exportSession()" title="Export conversation">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+    Export
+  </button>
+
+  <button class="tb-btn" onclick="clearAll()" title="Clear session">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+    Clear
+  </button>
+</div>
+
+<!-- Layout -->
+<div id="layout">
+
+  <!-- Left Sidebar -->
+  <aside id="sidebar">
+    <div class="sb-group">
+      <div class="sb-label">Mode</div>
+      <button class="nav-btn active" onclick="setMode('research',this)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        Deep research
+      </button>
+      <button class="nav-btn" onclick="setMode('document',this)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+        Document Q&amp;A
+      </button>
+      <button class="nav-btn" onclick="setMode('summarize',this)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="21" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="15" y1="18" x2="3" y2="18"/></svg>
+        Summarize
+      </button>
+      <button class="nav-btn" onclick="setMode('compare',this)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="18" rx="1"/></svg>
+        Compare &amp; contrast
+      </button>
+      <button class="nav-btn" onclick="setMode('extract',this)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 00-2 2v4"/><path d="M9 21H5a2 2 0 01-2-2v-4"/><path d="M15 3h4a2 2 0 012 2v4"/><path d="M15 21h4a2 2 0 002-2v-4"/><rect x="7" y="8" width="10" height="8" rx="1"/></svg>
+        Extract data
+      </button>
+      <button class="nav-btn" onclick="setMode('write',this)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
+        Draft &amp; write
+      </button>
+    </div>
+
+    <div class="sb-divider"></div>
+
+    <div class="sb-group" style="padding-bottom:4px">
+      <div class="sb-label">Context</div>
+      <div class="ctx-card" id="ctxCard">
+        <div class="ctx-card-title">Research mode</div>
+        <div class="ctx-card-desc">Multi-step search and synthesis. Traces reasoning steps and cites sources.</div>
+      </div>
+    </div>
+
+    <div class="sb-divider"></div>
+
+    <div class="sb-group">
+      <div class="sb-label">Output options</div>
+      <div class="setting-row">
+        Workflow trace
+        <div class="toggle on" id="tog-trace" onclick="toggleSetting('trace',this)"></div>
+      </div>
+      <div class="setting-row">
+        Source tags
+        <div class="toggle on" id="tog-sources" onclick="toggleSetting('sources',this)"></div>
+      </div>
+      <div class="setting-row">
+        Render markdown
+        <div class="toggle on" id="tog-md" onclick="toggleSetting('md',this)"></div>
+      </div>
+    </div>
+
+    <div class="sb-bottom">
+      <div class="sb-version">ResearchAI v3.0 · Groq (Free) + PDF</div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main id="main">
+    <div id="modebar">
+      <button class="mode-tab active" onclick="setSubMode('full',this)">Full response</button>
+      <button class="mode-tab" onclick="setSubMode('bullets',this)">Key points</button>
+      <button class="mode-tab" onclick="setSubMode('structured',this)">Structured report</button>
+      <button class="mode-tab" onclick="setSubMode('academic',this)">Academic style</button>
+    </div>
+
+    <div id="chatScroll">
+      <div id="emptyState">
+        <div class="empty-title">Research workspace</div>
+        <div class="empty-sub">Ask a research question, paste text to summarize, upload a document, or pick a starter below.</div>
+        <div class="starter-grid">
+          <div class="starter-card" onclick="useStarter('Do a literature review on the impact of large language models on knowledge work. Include key findings, open questions, and notable papers.')">
+            <strong>Literature review</strong>
+            <span>Key findings, gaps, and notable papers on a topic</span>
+          </div>
+          <div class="starter-card" onclick="useStarter('Compare and contrast three leading AI research assistants for professional use. Use a structured table followed by analysis.')">
+            <strong>Competitor analysis</strong>
+            <span>Side-by-side comparison with structured table</span>
+          </div>
+          <div class="starter-card" onclick="useStarter('Explain transformer architecture in clear terms — cover attention mechanisms, training, and why it outperformed prior approaches.')">
+            <strong>Concept explanation</strong>
+            <span>Plain-language breakdown with examples</span>
+          </div>
+          <div class="starter-card" onclick="useStarter('Draft a professional executive summary on the business opportunity in agentic AI for enterprise workflows. Audience: C-suite.')">
+            <strong>Executive summary</strong>
+            <span>C-suite-ready draft from a brief or topic</span>
+          </div>
+          <div class="starter-card" onclick="useStarter('Extract all key facts, statistics, entities, and dates from the text I will paste. Return as a structured list.')">
+            <strong>Data extraction</strong>
+            <span>Pull facts, entities, and figures from text</span>
+          </div>
+          <div class="starter-card" onclick="useStarter('Summarize the following text into: TL;DR (2 sentences), 5 key points, and what is missing or uncertain:')">
+            <strong>Quick summarize</strong>
+            <span>TL;DR + key points + gaps</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="inputArea">
+      <div class="input-frame">
+        <div class="input-topbar">
+          <button class="input-chip active" id="modeChip">Research</button>
+          <button class="input-chip active" id="webChip" onclick="toggleWeb()">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20"/></svg>
+            Web
+          </button>
+          <button class="input-chip" onclick="triggerUpload()">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66L9.41 16.41a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+            Attach file
+          </button>
+          <div class="chip-sep"></div>
+          <span style="font-size:11px;color:var(--text3)" id="modelChipLabel">Claude Sonnet 4.6</span>
+        </div>
+
+        <textarea id="userInput"
+          placeholder="Ask a research question, paste text to analyze, or describe what you need…"
+          rows="2"
+          onkeydown="handleKey(event)"
+          oninput="onInputChange(this)"></textarea>
+
+        <input type="file" id="fileInput" style="display:none" accept=".txt,.md,.csv,.json,.pdf" onchange="handleFile(event)" />
+
+        <div class="input-footer">
+          <span class="char-count" id="charCount">0</span>
+          <span class="input-hint">Enter to send · Shift+Enter for newline</span>
+          <button id="sendBtn" onclick="sendMessage()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Send
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Right Panel -->
+  <aside id="rightPanel">
+    <div class="rp-tabs">
+      <button class="rp-tab active" onclick="rpSwitch('stats',this)">Stats</button>
+      <button class="rp-tab" onclick="rpSwitch('docs',this)">Docs</button>
+      <button class="rp-tab" onclick="rpSwitch('history',this)">History</button>
+    </div>
+
+    <div class="rp-body">
+
+      <!-- Stats Panel -->
+      <div id="rp-stats">
+        <div class="rp-section">
+          <div class="rp-section-title">Session</div>
+          <div class="stat-grid">
+            <div class="stat-cell">
+              <div class="stat-num" id="s-queries">0</div>
+              <div class="stat-label">Queries</div>
+            </div>
+            <div class="stat-cell">
+              <div class="stat-num" id="s-tokens">0</div>
+              <div class="stat-label">Est. tokens</div>
+            </div>
+            <div class="stat-cell">
+              <div class="stat-num" id="s-steps">0</div>
+              <div class="stat-label">Agent steps</div>
+            </div>
+            <div class="stat-cell">
+              <div class="stat-num" id="s-latency">—</div>
+              <div class="stat-label">Avg latency</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rp-section">
+          <div class="rp-section-title">Active model</div>
+          <div class="model-info-card">
+            <div class="model-info-name" id="rp-model-name">Llama 3.3 70B</div>
+            <div class="model-info-sub" id="rp-model-sub">Groq · Free API</div>
+          </div>
+        </div>
+
+        <div class="rp-section">
+          <div class="rp-section-title">Groq API key (free)</div>
+          <div class="key-input-wrap">
+            <label>Paste your Groq key here. Get one free at <a href="https://console.groq.com" target="_blank">console.groq.com</a> → API Keys → Create API Key.</label>
+            <div class="key-input-row">
+              <input type="password" class="key-input" id="geminiKeyInput" placeholder="gsk_…" />
+              <button class="key-save-btn" onclick="saveGeminiKey()">Save</button>
+            </div>
+            <div class="key-note" id="keyNote">Free · 14,400 requests/day · key stays in your browser only.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Docs Panel -->
+      <div id="rp-docs" style="display:none">
+        <div class="rp-section">
+          <div class="rp-section-title">Attached files</div>
+          <div id="docList">
+            <div style="font-size:11px;color:var(--text3);padding:4px 0">No files attached.</div>
+          </div>
+          <div class="drop-zone" onclick="triggerUpload()" style="margin-top:8px">
+            <div class="drop-zone-icon">↑</div>
+            <div class="drop-zone-text">Click to attach a file<br><span style="font-size:10px">PDF · TXT · MD · CSV · JSON</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- History Panel -->
+      <div id="rp-history" style="display:none">
+        <div class="rp-section">
+          <div class="rp-section-title">Recent queries</div>
+          <div id="histList">
+            <div style="font-size:11px;color:var(--text3);padding:4px 0">No queries yet.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </aside>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ── State ──────────────────────────────────────── */
+const S = {
+  mode: 'research',
+  subMode: 'full',
+  modelId: 'llama-3.3-70b-versatile',
+  modelName: 'Llama 3.3 70B',
+  modelProvider: 'groq',
+  webSearch: false,
+  showTrace: true,
+  showSources: true,
+  renderMd: true,
+  groqKey: '',
+  conversation: [],
+  docs: [],
+  history: [],
+  stats: { queries: 0, tokens: 0, steps: 0, totalMs: 0 },
+  loading: false
+};
+
+/* ── Mode config ────────────────────────────────── */
+const MODES = {
+  research: {
+    chip: 'Research',
+    placeholder: 'Ask a research question…',
+    ctxTitle: 'Research mode',
+    ctxDesc: 'Multi-step web search and synthesis. Traces reasoning and cites sources.',
+    system: sub => {
+      const base = 'You are a meticulous research assistant.';
+      if (sub === 'bullets')    return base + ' Respond ONLY with concise bullet points grouped under bold headings. No prose. Be specific — no filler.';
+      if (sub === 'structured') return base + ' Always respond with EXACTLY this structure:\n## Executive Summary\n(2-3 sentences)\n## Key Findings\n(numbered list)\n## Analysis\n(2-3 paragraphs)\n## Gaps & Caveats\n(bullets)\n## Takeaway\n(1 sentence). Use markdown strictly.';
+      if (sub === 'academic')   return base + ' Write in a formal academic register with precise language and hedged claims. Structure: Abstract → Background → Findings → Discussion → Conclusion.';
+      return base + ' Give thorough, well-structured responses with markdown headers. Back every claim with reasoning.';
+    },
+  },
+  document: {
+    chip: 'Document',
+    placeholder: 'Ask a question about your attached document…',
+    ctxTitle: 'Document Q&A',
+    ctxDesc: 'Ask questions about attached files. Attach a PDF or text file first.',
+    system: sub => {
+      const base = 'You are a precise document analyst. Answer strictly based on the provided document content. Quote relevant passages using blockquotes. If the answer is not in the document, say so clearly.';
+      if (sub === 'bullets')    return base + ' Format your answer as bullet points only.';
+      if (sub === 'structured') return base + ' Structure your answer as: ## Direct Answer | ## Supporting Evidence (quotes) | ## Related Context | ## What the Document Does Not Cover.';
+      if (sub === 'academic')   return base + ' Write in a formal academic register.';
+      return base + ' Use clear markdown headers to organize your response.';
+    },
+  },
+  summarize: {
+    chip: 'Summarize',
+    placeholder: 'Paste text to summarize, or describe what to summarize…',
+    ctxTitle: 'Summarize mode',
+    ctxDesc: 'Compress text or topics into concise, structured summaries.',
+    system: sub => {
+      if (sub === 'bullets')    return 'You are an expert summarizer. Output ONLY bullet points: key points, nothing else. Max 10 bullets. No intro sentence.';
+      if (sub === 'structured') return 'You are an expert summarizer. Always output:\n## TL;DR\n(max 2 sentences)\n## Key Points\n(max 7 bullets)\n## Key Entities\n(people, orgs, places mentioned)\n## What Is Missing or Uncertain\n(bullets)';
+      if (sub === 'academic')   return 'You are an expert summarizer writing for an academic audience. Produce a structured abstract: Background, Objective, Key Findings, Conclusions. Use formal language.';
+      return 'You are an expert summarizer. Output: **TL;DR** (2 sentences), then **Key points** (max 7 bullets), then **What is missing or uncertain**. Be ruthlessly concise.';
+    },
+  },
+  compare: {
+    chip: 'Compare',
+    placeholder: 'Describe what to compare — topics, products, papers, arguments…',
+    ctxTitle: 'Compare & contrast',
+    ctxDesc: 'Side-by-side comparison with table, key differences, and verdict.',
+    system: sub => {
+      const base = 'You are a structured comparison analyst.';
+      if (sub === 'bullets')    return base + ' Compare the items using ONLY bullet points grouped by dimension. No tables, no prose paragraphs.';
+      if (sub === 'structured') return base + ' Always produce: 1) A markdown comparison table with the most important dimensions as rows, 2) ## Key Differences (3-5 bullets), 3) ## Recommendation with a clear verdict. Be objective.';
+      if (sub === 'academic')   return base + ' Produce a formal comparative analysis with Introduction, Comparison Criteria, Analysis by Criterion, and Conclusion.';
+      return base + ' Produce a markdown comparison table, then Key Differences bullets, then a Recommendation paragraph.';
+    },
+  },
+  extract: {
+    chip: 'Extract',
+    placeholder: 'Paste text to extract data from…',
+    ctxTitle: 'Data extraction',
+    ctxDesc: 'Pull structured facts, entities, statistics, and dates from any text.',
+    system: sub => {
+      const base = 'You are a data extraction specialist. Be exhaustive and precise. Never paraphrase facts — preserve exact wording.';
+      if (sub === 'bullets')    return base + ' Extract everything as a single flat bullet list, one fact per bullet.';
+      if (sub === 'structured') return base + ' Extract into labeled sections:\n## People & Organizations\n## Dates & Times\n## Statistics & Numbers\n## Key Claims\n## Action Items\nUse bullets under each section.';
+      if (sub === 'academic')   return base + ' Extract and present findings in a formal structured format suitable for academic citation.';
+      return base + ' Extract: entities (people, orgs, places), dates, statistics, key claims, and action items — each as a labeled section with bullets.';
+    },
+  },
+  write: {
+    chip: 'Write',
+    placeholder: 'Describe what you need — report, email, abstract, proposal…',
+    ctxTitle: 'Draft & write',
+    ctxDesc: 'AI-assisted drafting for reports, emails, abstracts, and proposals.',
+    system: sub => {
+      const base = 'You are a professional writer and editor. Produce clean, polished drafts.';
+      if (sub === 'bullets')    return base + ' Write the draft, then below it add a ## Key Points section summarizing it in bullets.';
+      if (sub === 'structured') return base + ' Structure all output with clear markdown headers. Include: ## Purpose, ## Main Content (with subheadings), ## Call to Action or Next Steps.';
+      if (sub === 'academic')   return base + ' Write in a formal academic register. Use precise language, passive voice where appropriate, and a structured format.';
+      return base + ' Match tone to the requested format. After the primary draft, add a brief ## Alternative Approach section with a shorter variant.';
+    },
+  },
+};
+
+/* ── UI helpers ─────────────────────────────────── */
+function toast(msg, dur = 2200) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), dur);
+}
+
+function now() {
+  return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
+function updateStats() {
+  document.getElementById('s-queries').textContent = S.stats.queries;
+  const tk = S.stats.tokens;
+  document.getElementById('s-tokens').textContent = tk > 999 ? (tk/1000).toFixed(1)+'k' : tk;
+  document.getElementById('s-steps').textContent = S.stats.steps;
+  if (S.stats.queries) {
+    const avg = (S.stats.totalMs / S.stats.queries / 1000).toFixed(1);
+    document.getElementById('s-latency').textContent = avg + 's';
+  }
+}
+
+/* ── Mode switching ─────────────────────────────── */
+function setMode(mode, el) {
+  S.mode = mode;
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  const cfg = MODES[mode];
+  document.getElementById('modeChip').textContent = cfg.chip;
+  document.getElementById('userInput').placeholder = cfg.placeholder;
+  document.getElementById('ctxCard').innerHTML =
+    `<div class="ctx-card-title">${cfg.ctxTitle}</div><div class="ctx-card-desc">${cfg.ctxDesc}</div>`;
+}
+
+function setSubMode(sub, el) {
+  S.subMode = sub;
+  document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+/* ── Model switching ────────────────────────────── */
+function toggleDropdown() {
+  document.getElementById('modelDropdown').classList.toggle('open');
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('#modelBtn') && !e.target.closest('#modelDropdown')) {
+    document.getElementById('modelDropdown').classList.remove('open');
+  }
+});
+
+function selectModel(el) {
+  S.modelId       = el.dataset.id;
+  S.modelName     = el.dataset.name;
+  S.modelProvider = el.dataset.provider;
+
+  document.getElementById('modelLabel').textContent    = S.modelName;
+  document.getElementById('modelChipLabel').textContent = S.modelName;
+  document.getElementById('modelDot').className = 'model-dot' + (S.modelProvider === 'groq' ? ' groq' : S.modelProvider === 'gemini' ? ' gemini' : '');
+  document.getElementById('rp-model-name').textContent = S.modelName;
+  document.getElementById('rp-model-sub').textContent  = S.modelProvider === 'groq' ? 'Groq · Free API' : S.modelProvider === 'gemini' ? 'Google · Gemini API' : 'Anthropic · claude.ai API';
+
+  document.querySelectorAll('.model-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('modelDropdown').classList.remove('open');
+}
+
+/* ── Web search toggle ──────────────────────────── */
+function toggleWeb() {
+  S.webSearch = !S.webSearch;
+  document.getElementById('webBtn').classList.toggle('on', S.webSearch);
+  document.getElementById('webChip').classList.toggle('active', S.webSearch);
+}
+
+/* ── Settings toggles ───────────────────────────── */
+function toggleSetting(key, el) {
+  const map = { trace: 'showTrace', sources: 'showSources', md: 'renderMd' };
+  S[map[key]] = !S[map[key]];
+  el.classList.toggle('on');
+}
+
+/* ── Gemini key ─────────────────────────────────── */
+function saveGeminiKey() {
+  const val = document.getElementById('geminiKeyInput').value.trim();
+  if (!val) return;
+  S.groqKey = val;
+  document.getElementById('geminiKeyInput').value = '';
+  document.getElementById('geminiKeyInput').placeholder = '● Key saved (session only)';
+  document.getElementById('keyNote').textContent = '✓ Groq key saved — ready to use!';
+  toast('Groq key saved');
+}
+
+/* ── File upload ────────────────────────────────── */
+function triggerUpload() { document.getElementById('fileInput').click(); }
+
+async function handleFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  e.target.value = '';
+
+  const isPdf = file.name.toLowerCase().endsWith('.pdf');
+
+  // Show loading state in docs panel
+  document.getElementById('docList').innerHTML =
+    `<div style="font-size:11px;color:var(--text3);padding:6px 0">
+      ⏳ Reading ${file.name}…
+    </div>`;
+
+  try {
+    if (isPdf) {
+      // ── PDF: use PDF.js ──────────────────────────
+      pdfjsLib.GlobalWorkerOptions.workerSrc =
+        'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+      const arrayBuffer = await file.arrayBuffer();
+      const pdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      const totalPages = pdfDoc.numPages;
+
+      let fullText = '';
+      for (let p = 1; p <= totalPages; p++) {
+        const page = await pdfDoc.getPage(p);
+        const content = await page.getTextContent();
+        const pageText = content.items.map(i => i.str).join(' ');
+        fullText += `\n[Page ${p}]\n${pageText}\n`;
+      }
+
+      if (!fullText.trim()) {
+        renderDocs();
+        toast('⚠️ PDF appears to be scanned/image-only — no text found');
+        document.getElementById('docList').innerHTML =
+          `<div style="font-size:11px;color:var(--amber);padding:4px 0">
+            ⚠️ <strong>${file.name}</strong> is a scanned PDF. Text could not be extracted.
+            <br>Try a text-based PDF instead.
+          </div>`;
+        return;
+      }
+
+      S.docs.push({
+        name: file.name,
+        size: file.size,
+        content: fullText.trim(),
+        pages: totalPages,
+        type: 'pdf'
+      });
+      renderDocs();
+      toast(`✓ PDF loaded — ${totalPages} pages, ${fullText.length.toLocaleString()} chars`);
+
+    } else {
+      // ── Plain text files ─────────────────────────
+      const content = await file.text();
+      S.docs.push({
+        name: file.name,
+        size: file.size,
+        content,
+        type: 'text'
+      });
+      renderDocs();
+      toast(`✓ Attached: ${file.name}`);
+    }
+  } catch (err) {
+    renderDocs();
+    toast(`Error reading file: ${err.message}`);
+    document.getElementById('docList').innerHTML =
+      `<div style="font-size:11px;color:var(--red);padding:4px 0">
+        Error reading ${file.name}: ${err.message}
+      </div>`;
+  }
+}
+
+function renderDocs() {
+  const el = document.getElementById('docList');
+  if (!S.docs.length) {
+    el.innerHTML = '<div style="font-size:11px;color:var(--text3);padding:4px 0">No files attached.</div>';
+    return;
+  }
+  el.innerHTML = S.docs.map((d, i) => `
+    <div class="doc-item">
+      <div class="doc-icon">${d.type === 'pdf' ? '📕' : '📄'}</div>
+      <div style="flex:1;min-width:0">
+        <div class="doc-name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${d.name}</div>
+        <div class="doc-meta">
+          ${(d.size/1024).toFixed(1)} KB
+          ${d.pages ? ` · ${d.pages} pages` : ''}
+          · ${d.content.length.toLocaleString()} chars
+        </div>
+      </div>
+      <button class="doc-remove" onclick="removeDoc(${i})">✕</button>
+    </div>`).join('');
+}
+
+function removeDoc(i) {
+  S.docs.splice(i, 1);
+  renderDocs();
+}
+
+/* ── Panel switching ────────────────────────────── */
+function rpSwitch(panel, el) {
+  document.querySelectorAll('.rp-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  ['stats','docs','history'].forEach(p => {
+    document.getElementById('rp-' + p).style.display = p === panel ? 'block' : 'none';
+  });
+}
+
+/* ── Export / clear ─────────────────────────────── */
+function exportSession() {
+  if (!S.conversation.length) { toast('Nothing to export'); return; }
+  const header = `ResearchAI Session Export\nModel: ${S.modelName}\nDate: ${new Date().toLocaleString()}\n${'─'.repeat(50)}\n\n`;
+  const body = S.conversation.map(m =>
+    `[${m.role === 'ai' ? 'ASSISTANT' : 'USER'}]\n${m.content}`
+  ).join('\n\n' + '─'.repeat(50) + '\n\n');
+  const blob = new Blob([header + body], { type: 'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `research-session-${Date.now()}.txt`;
+  a.click();
+  toast('Exported');
+}
+
+function clearAll() {
+  S.conversation = [];
+  S.stats = { queries: 0, tokens: 0, steps: 0, totalMs: 0 };
+  S.history = [];
+  const scroll = document.getElementById('chatScroll');
+  scroll.innerHTML = '';
+  const es = document.createElement('div');
+  es.id = 'emptyState';
+  es.className = 'empty-state';
+  es.innerHTML = document.createElement('div').innerHTML; // rebuilt below
+  scroll.appendChild(buildEmptyState());
+  updateStats();
+  document.getElementById('histList').innerHTML = '<div style="font-size:11px;color:var(--text3);padding:4px 0">No queries yet.</div>';
+  toast('Session cleared');
+}
+
+function buildEmptyState() {
+  const el = document.createElement('div');
+  el.id = 'emptyState';
+  el.style.cssText = 'display:flex;flex-direction:column;align-items:center;text-align:center;padding:48px 24px 24px;gap:6px;';
+  el.innerHTML = `
+    <div class="empty-title">Research workspace</div>
+    <div class="empty-sub">Ask a research question, paste text to summarize, upload a document, or pick a starter below.</div>
+    <div class="starter-grid">
+      <div class="starter-card" onclick="useStarter('Do a literature review on the impact of large language models on knowledge work.')"><strong>Literature review</strong><span>Key findings, gaps, and notable papers</span></div>
+      <div class="starter-card" onclick="useStarter('Compare and contrast three leading AI research assistants for professional use.')"><strong>Competitor analysis</strong><span>Side-by-side table + analysis</span></div>
+      <div class="starter-card" onclick="useStarter('Explain transformer architecture clearly — attention, training, and why it won.')"><strong>Concept explanation</strong><span>Plain-language breakdown with examples</span></div>
+      <div class="starter-card" onclick="useStarter('Draft an executive summary on agentic AI for enterprise workflows. Audience: C-suite.')"><strong>Executive summary</strong><span>C-suite-ready draft from a brief</span></div>
+      <div class="starter-card" onclick="useStarter('Extract all key facts, statistics, entities, and dates from the following text:')"><strong>Data extraction</strong><span>Pull facts, entities, figures</span></div>
+      <div class="starter-card" onclick="useStarter('Summarize the following into TL;DR + 5 key points + gaps:')"><strong>Quick summarize</strong><span>TL;DR + key points + gaps</span></div>
+    </div>`;
+  return el;
+}
+
+/* ── Input ──────────────────────────────────────── */
+function onInputChange(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+  document.getElementById('charCount').textContent = el.value.length;
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+}
+
+function useStarter(text) {
+  const es = document.getElementById('emptyState');
+  if (es) es.remove();
+  document.getElementById('userInput').value = text;
+  onInputChange(document.getElementById('userInput'));
+  document.getElementById('userInput').focus();
+}
+
+/* ── Markdown renderer ──────────────────────────── */
+function renderMarkdown(text) {
+  if (!S.renderMd) return `<p>${text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/\n/g,'<br>')}</p>`;
+  let h = text
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    // code blocks
+    .replace(/```(\w*)\n?([\s\S]*?)```/g, (_,lang,code) => `<pre><code>${code.trim()}</code></pre>`)
+    // inline code
+    .replace(/`([^`\n]+)`/g, '<code>$1</code>')
+    // headers
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+    // bold / italic
+    .replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    // blockquotes
+    .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
+    // hr
+    .replace(/^---+$/gm, '<hr>')
+    // tables (basic)
+    .replace(/^\|(.+)\|$/gm, (line) => {
+      const cells = line.split('|').filter(c => c.trim() !== '');
+      return '<tr>' + cells.map(c => `<td>${c.trim()}</td>`).join('') + '</tr>';
+    })
+    // lists
+    .replace(/^(\d+)\. (.+)$/gm, '<li>$2</li>')
+    .replace(/^[-*] (.+)$/gm, '<li>$1</li>');
+
+  // wrap consecutive <li> in <ul>
+  h = h.replace(/(<li>[\s\S]+?)(?=<(?!li)|$)/g, m => {
+    if (m.includes('<ol>') || m.includes('<ul>')) return m;
+    return '<ul>' + m + '</ul>';
+  });
+
+  // wrap consecutive <tr> in table
+  h = h.replace(/(<tr>[\s\S]+?<\/tr>(\s*<tr>[\s\S]+?<\/tr>)*)/g, t => `<table>${t}</table>`);
+
+  // paragraphs (double newline blocks not already wrapped)
+  h = h.split(/\n\n+/).map(block => {
+    block = block.trim();
+    if (!block) return '';
+    if (/^<(h[1-3]|ul|ol|pre|blockquote|table|hr)/.test(block)) return block;
+    return '<p>' + block.replace(/\n/g,'<br>') + '</p>';
+  }).join('\n');
+
+  return h;
+}
+
+/* ── DOM helpers ────────────────────────────────── */
+function appendMsg(role, content, meta) {
+  const es = document.getElementById('emptyState');
+  if (es) es.remove();
+
+  const scroll = document.getElementById('chatScroll');
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+
+  const isAi = role === 'ai';
+  const avHtml = isAi
+    ? `<div class="msg-av ai">AI</div>`
+    : `<div class="msg-av">You</div>`;
+
+  let bodyHtml = `
+    <div class="msg-header">
+      <span class="msg-name">${isAi ? S.modelName : 'You'}</span>
+      <span class="msg-time">${now()}</span>
+      ${isAi ? `<span class="msg-tag">${MODES[S.mode].chip}</span>` : ''}
+    </div>`;
+
+  if (!isAi) {
+    bodyHtml += `<div class="user-bubble">${content.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/\n/g,'<br>')}</div>`;
+  } else {
+    bodyHtml += `<div class="ai-content">${renderMarkdown(content)}</div>`;
+
+    if (meta?.steps && S.showTrace) {
+      bodyHtml += `
+        <div class="trace-block">
+          <div class="trace-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'flex':'none'">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            Workflow trace · ${meta.steps.length} steps
+          </div>
+          <div class="trace-body">
+            ${meta.steps.map(s => `
+              <div class="trace-step">
+                <div class="step-badge done">✓</div>
+                <div class="step-info">
+                  <div class="step-label">${s.label}</div>
+                  <div class="step-detail">${s.detail}</div>
+                </div>
+                <div class="step-time">${s.time}</div>
+              </div>`).join('')}
+          </div>
+        </div>`;
+    }
+
+    if (meta?.sources && S.showSources && meta.sources.length) {
+      bodyHtml += `<div class="source-row">${meta.sources.map(s =>
+        `<span class="source-tag">↗ ${s}</span>`
+      ).join('')}</div>`;
+    }
+
+    bodyHtml += `
+      <div class="msg-actions">
+        <button class="msg-action-btn" onclick="copyMsg(this)" data-text="${encodeURIComponent(content)}">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          Copy
+        </button>
+        <button class="msg-action-btn" onclick="rerun()">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+          Regenerate
+        </button>
+      </div>`;
+  }
+
+  div.innerHTML = `${avHtml}<div class="msg-body">${bodyHtml}</div>`;
+  scroll.appendChild(div);
+  scroll.scrollTop = scroll.scrollHeight;
+}
+
+function copyMsg(btn) {
+  const text = decodeURIComponent(btn.dataset.text);
+  navigator.clipboard.writeText(text).then(() => toast('Copied to clipboard'));
+}
+
+function rerun() {
+  const last = S.conversation.filter(m => m.role === 'user').pop();
+  if (last) {
+    document.getElementById('userInput').value = last.content;
+    onInputChange(document.getElementById('userInput'));
+  }
+}
+
+function showTyping() {
+  const es = document.getElementById('emptyState'); if (es) es.remove();
+  const scroll = document.getElementById('chatScroll');
+  const div = document.createElement('div');
+  div.className = 'typing-row'; div.id = 'typingRow';
+  div.innerHTML = `
+    <div class="msg-av ai">AI</div>
+    <div class="typing-bubble">
+      <div class="typing-dots"><span></span><span></span><span></span></div>
+      <span>Working…</span>
+    </div>`;
+  scroll.appendChild(div);
+  scroll.scrollTop = scroll.scrollHeight;
+}
+function removeTyping() { const el=document.getElementById('typingRow'); if(el) el.remove(); }
+
+function addHistory(q) {
+  S.history.unshift({ q, time: now(), model: S.modelName });
+  const el = document.getElementById('histList');
+  el.innerHTML = S.history.slice(0,20).map(h => `
+    <div class="history-item" onclick="reuseHistory('${encodeURIComponent(h.q)}')">
+      <div class="history-q">${h.q}</div>
+      <div class="history-meta">${h.time} · ${h.model}</div>
+    </div>`).join('');
+}
+
+function reuseHistory(q) {
+  document.getElementById('userInput').value = decodeURIComponent(q);
+  onInputChange(document.getElementById('userInput'));
+  document.getElementById('userInput').focus();
+}
+
+/* ── Send message ───────────────────────────────── */
+async function sendMessage() {
+  if (S.loading) return;
+  const input = document.getElementById('userInput');
+  const text  = input.value.trim();
+  if (!text) return;
+
+  S.loading = true;
+  document.getElementById('sendBtn').disabled = true;
+  input.value = ''; input.style.height = 'auto';
+  document.getElementById('charCount').textContent = '0';
+
+  appendMsg('user', text);
+  S.conversation.push({ role: 'user', content: text });
+  addHistory(text);
+  showTyping();
+
+  const t0 = Date.now();
+  const cfg = MODES[S.mode];
+  const systemPrompt = cfg.system(S.subMode);
+
+  const docContext = S.docs.length
+    ? '\n\n[Attached documents]\n' + S.docs.map(d =>
+        `--- Document: ${d.name} ---\n${d.content.slice(0, 10000)}`
+      ).join('\n\n')
+    : '';
+
+  const agentSteps = [
+    { label: 'Query analysis',    detail: `Mode: ${cfg.chip} · Output: ${S.subMode}`,                          time: '0.1s' },
+    { label: 'Retrieval',         detail: S.webSearch && S.modelProvider==='claude' ? 'Web search + context' : `${S.docs.length} doc(s) in context`, time: '0.4s' },
+    { label: 'Synthesis',         detail: 'Cross-referencing and structuring response',                         time: '0.6s' },
+    { label: 'Formatting',        detail: `Model: ${S.modelName}`,                                              time: '0.2s' },
+  ];
+
+  let reply = '';
+
+  try {
+    if (S.modelProvider === 'claude') {
+      const messages = S.conversation.map(m => ({
+        role: m.role === 'ai' ? 'assistant' : 'user',
+        content: m.content
+      }));
+      if (docContext) {
+        messages[messages.length-1].content += docContext;
+      }
+      const body = {
+        model: S.modelId,
+        max_tokens: 1000,
+        system: systemPrompt,
+        messages
+      };
+      if (S.webSearch) body.tools = [{ type: 'web_search_20250305', name: 'web_search' }];
+
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      const data = await res.json();
+      reply = (data.content || []).filter(b => b.type === 'text').map(b => b.text).join('\n') || (data.error?.message || 'No response.');
+
+    } else {
+      // Groq
+      if (!S.groqKey) {
+        reply = '**Groq API key required.**\n\nGo to the **Stats tab** (right panel) → paste your key → click Save.\n\nGet a free key at [console.groq.com](https://console.groq.com) → API Keys → Create API Key.\n\nKey starts with `gsk_`';
+      } else {
+        const messages = [
+          { role: 'system', content: systemPrompt },
+          ...S.conversation.map(m => ({
+            role: m.role === 'ai' ? 'assistant' : 'user',
+            content: m.content
+          }))
+        ];
+        if (docContext) messages[messages.length-1].content += docContext;
+
+        const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${S.groqKey}`
+          },
+          body: JSON.stringify({
+            model: S.modelId,
+            messages,
+            max_tokens: 2000,
+            temperature: 0.7
+          })
+        });
+        const data = await res.json();
+        reply = data?.choices?.[0]?.message?.content
+          || data?.error?.message
+          || 'No response from Groq.';
+      }
+    }
+  } catch (err) {
+    reply = `**Error:** ${err.message}`;
+  }
+
+  const elapsed = Date.now() - t0;
+  S.conversation.push({ role: 'ai', content: reply });
+  S.stats.queries++;
+  S.stats.tokens += Math.round((text.length + reply.length) / 4);
+  S.stats.steps  += agentSteps.length;
+  S.stats.totalMs += elapsed;
+  updateStats();
+
+  const sources = [];
+  if (S.modelProvider === 'groq') sources.push('Groq API');
+  if (S.modelProvider === 'claude') sources.push('Claude API');
+  S.docs.forEach(d => sources.push(d.name));
+
+  removeTyping();
+  appendMsg('ai', reply, { steps: agentSteps, sources });
+
+  S.loading = false;
+  document.getElementById('sendBtn').disabled = false;
+  input.focus();
+}
+</script>
+</body>
+</html>

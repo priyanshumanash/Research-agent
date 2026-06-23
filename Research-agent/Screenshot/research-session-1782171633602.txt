@@ -1,0 +1,383 @@
+ResearchAI Session Export
+Model: Llama 3.3 70B
+Date: 23/06/2026, 03:40:33
+──────────────────────────────────────────────────
+
+[USER]
+Analyze the competitive landscape of AI assistants in 2025
+
+──────────────────────────────────────────────────
+
+[ASSISTANT]
+### Introduction to AI Assistants
+Artificial intelligence (AI) assistants, also known as virtual assistants or chatbots, are computer programs designed to simulate human-like conversations and interactions. These assistants use natural language processing (NLP) and machine learning algorithms to understand and respond to user inputs. The competitive landscape of AI assistants in 2025 is expected to be highly dynamic, with several key players vying for market share.
+
+### Key Players in the Market
+The following are some of the key players in the AI assistant market in 2025:
+1. **Amazon Alexa**: Developed by Amazon, Alexa is one of the most popular AI assistants, with a wide range of integrations with smart home devices and third-party services.
+2. **Google Assistant**: Google's AI assistant is integrated into various devices, including Android smartphones, Google Home smart speakers, and Google Nest devices.
+3. **Apple Siri**: Siri is Apple's virtual assistant, available on iOS devices, macOS, and watchOS.
+4. **Microsoft Cortana**: Cortana is Microsoft's AI assistant, integrated into Windows 10 and available on other platforms, including Android and iOS.
+5. **Samsung Bixby**: Bixby is Samsung's AI assistant, available on Samsung devices, including smartphones and smart home appliances.
+
+### Market Trends and Analysis
+The AI assistant market in 2025 is expected to be driven by several trends, including:
+* **Increased Adoption of Smart Home Devices**: The growing demand for smart home devices is driving the adoption of AI assistants, as users seek to control and interact with their devices using voice commands.
+* **Improvements in NLP and Machine Learning**: Advances in NLP and machine learning algorithms are enabling AI assistants to better understand and respond to user inputs, improving the overall user experience.
+* **Expansion into New Markets**: AI assistants are expanding into new markets, including the automotive and healthcare industries, where they are being used to provide personalized services and support.
+
+### Competitive Landscape Analysis
+The competitive landscape of AI assistants in 2025 can be analyzed using the following framework:
+* **Market Share**: Amazon Alexa and Google Assistant are expected to dominate the market, with Apple Siri and Microsoft Cortana also having significant market share.
+* **Features and Capabilities**: AI assistants are differentiating themselves through their features and capabilities, such as integration with smart home devices, support for multiple languages, and ability to perform complex tasks.
+* **Partnerships and Collaborations**: Partnerships and collaborations with third-party developers and service providers are critical for AI assistants, as they enable the development of new skills and integrations.
+
+### Challenges and Opportunities
+The AI assistant market in 2025 faces several challenges and opportunities, including:
+* **Data Privacy and Security**: AI assistants must ensure the security and privacy of user data, as concerns around data protection continue to grow.
+* **User Adoption and Engagement**: AI assistants must provide a seamless and intuitive user experience to drive adoption and engagement.
+* **New Technologies and Innovations**: The integration of new technologies, such as augmented reality and blockchain, is expected to create new opportunities for AI assistants.
+
+### Conclusion
+The competitive landscape of AI assistants in 2025 is highly dynamic, with several key players vying for market share. The market is driven by trends such as increased adoption of smart home devices, improvements in NLP and machine learning, and expansion into new markets. To succeed, AI assistants must provide a seamless and intuitive user experience, ensure data privacy and security, and leverage new technologies and innovations to drive growth and adoption.
+
+──────────────────────────────────────────────────
+
+[USER]
+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
+
+──────────────────────────────────────────────────
+
+[ASSISTANT]
+## Executive Summary
+The competitive landscape of AI assistants in 2025 is highly dynamic, with several key players vying for market share. Amazon Alexa, Google Assistant, Apple Siri, Microsoft Cortana, and Samsung Bixby are some of the major players in the market. The market is driven by trends such as increased adoption of smart home devices and improvements in NLP and machine learning.
+
+## Key Findings
+1. **Amazon Alexa** is one of the most popular AI assistants, with a wide range of integrations with smart home devices and third-party services.
+2. **Google Assistant** is integrated into various devices, including Android smartphones, Google Home smart speakers, and Google Nest devices.
+3. **Apple Siri** is Apple's virtual assistant, available on iOS devices, macOS, and watchOS.
+4. **Microsoft Cortana** is Microsoft's AI assistant, integrated into Windows 10 and available on other platforms, including Android and iOS.
+5. **Samsung Bixby** is Samsung's AI assistant, available on Samsung devices, including smartphones and smart home appliances.
+
+## Analysis
+The AI assistant market in 2025 is expected to be driven by several trends, including increased adoption of smart home devices and improvements in NLP and machine learning. The market is highly competitive, with each player having its own strengths and weaknesses. Amazon Alexa and Google Assistant are expected to dominate the market, with Apple Siri and Microsoft Cortana also having significant market share. The integration of new technologies, such as augmented reality and blockchain, is expected to create new opportunities for AI assistants.
+
+The competitive landscape of AI assistants in 2025 can be analyzed using the following framework: market share, features and capabilities, and partnerships and collaborations. AI assistants are differentiating themselves through their features and capabilities, such as integration with smart home devices, support for multiple languages, and ability to perform complex tasks. Partnerships and collaborations with third-party developers and service providers are critical for AI assistants, as they enable the development of new skills and integrations.
+
+The AI assistant market in 2025 faces several challenges and opportunities, including data privacy and security, user adoption and engagement, and new technologies and innovations. AI assistants must ensure the security and privacy of user data, as concerns around data protection continue to grow. They must also provide a seamless and intuitive user experience to drive adoption and engagement.
+
+## Gaps & Caveats
+* Data privacy and security concerns
+* Limited capabilities in certain languages and regions
+* Dependence on third-party developers and service providers
+* Integration with new technologies and innovations
+* User adoption and engagement challenges
+
+## Takeaway
+The competitive landscape of AI assistants in 2025 is highly dynamic, with several key players vying for market share, and the market is expected to be driven by trends such as increased adoption of smart home devices and improvements in NLP and machine learning.
+
+──────────────────────────────────────────────────
+
+[USER]
+Analyze the competitive landscape of AI assistants in 2025
+
+──────────────────────────────────────────────────
+
+[ASSISTANT]
+## Executive Summary
+The competitive landscape of AI assistants in 2025 is highly dynamic, with several key players vying for market share. Amazon Alexa, Google Assistant, Apple Siri, Microsoft Cortana, and Samsung Bixby are some of the major players in the market, each with their own strengths and weaknesses. The market is expected to be driven by trends such as increased adoption of smart home devices and improvements in NLP and machine learning.
+
+## Key Findings
+1. **Amazon Alexa** is one of the most popular AI assistants, with a wide range of integrations with smart home devices and third-party services.
+2. **Google Assistant** is integrated into various devices, including Android smartphones, Google Home smart speakers, and Google Nest devices.
+3. **Apple Siri** is Apple's virtual assistant, available on iOS devices, macOS, and watchOS.
+4. **Microsoft Cortana** is Microsoft's AI assistant, integrated into Windows 10 and available on other platforms, including Android and iOS.
+5. **Samsung Bixby** is Samsung's AI assistant, available on Samsung devices, including smartphones and smart home appliances.
+
+## Analysis
+The AI assistant market in 2025 is expected to be highly competitive, with each player having its own strengths and weaknesses. Amazon Alexa and Google Assistant are expected to dominate the market, with Apple Siri and Microsoft Cortana also having significant market share. The integration of new technologies, such as augmented reality and blockchain, is expected to create new opportunities for AI assistants. The market is driven by trends such as increased adoption of smart home devices, improvements in NLP and machine learning, and expansion into new markets such as the automotive and healthcare industries.
+
+The competitive landscape of AI assistants in 2025 can be analyzed using the following framework: market share, features and capabilities, and partnerships and collaborations. AI assistants are differentiating themselves through their features and capabilities, such as integration with smart home devices, support for multiple languages, and ability to perform complex tasks. Partnerships and collaborations with third-party developers and service providers are critical for AI assistants, as they enable the development of new skills and integrations.
+
+The AI assistant market in 2025 faces several challenges and opportunities, including data privacy and security, user adoption and engagement, and new technologies and innovations. AI assistants must ensure the security and privacy of user data, as concerns around data protection continue to grow. They must also provide a seamless and intuitive user experience to drive adoption and engagement.
+
+## Gaps & Caveats
+* Data privacy and security concerns
+* Limited capabilities in certain languages and regions
+* Dependence on third-party developers and service providers
+* Integration with new technologies and innovations
+* User adoption and engagement challenges
+
+## Takeaway
+The competitive landscape of AI assistants in 2025 is highly dynamic, with several key players vying for market share, and the market is expected to be driven by trends such as increased adoption of smart home devices and improvements in NLP and machine learning.
+
+──────────────────────────────────────────────────
+
+[USER]
+Explain how large language models work
+
+──────────────────────────────────────────────────
+
+[ASSISTANT]
+## **Overview of Large Language Models**
+* Large language models are a type of artificial intelligence (AI) designed to process and understand human language
+* They are trained on vast amounts of text data to learn patterns and relationships in language
+* These models can be used for a variety of tasks, including language translation, text summarization, and conversation generation
+
+## **Key Components of Large Language Models**
+* **Tokenizer**: breaks down text into individual words or subwords
+* **Embeddings**: converts words into numerical vectors that can be processed by the model
+* **Encoder**: analyzes the input text and generates a continuous representation of the input
+* **Decoder**: generates output text based on the input and the model's understanding of the context
+
+## **Training Large Language Models**
+* **Supervised learning**: models are trained on labeled datasets to learn specific tasks
+* **Unsupervised learning**: models are trained on unlabeled datasets to learn general language patterns
+* **Self-supervised learning**: models are trained to predict missing words or next words in a sequence
+
+## **Techniques Used in Large Language Models**
+* **Transformers**: a type of neural network architecture that is particularly well-suited for sequence-to-sequence tasks
+* **Attention mechanisms**: allow the model to focus on specific parts of the input when generating output
+* **Layer normalization**: normalizes the output of each layer to improve stability and performance
+
+## **Applications of Large Language Models**
+* **Language translation**: models can be used to translate text from one language to another
+* **Text summarization**: models can be used to summarize long pieces of text into shorter summaries
+* **Conversation generation**: models can be used to generate human-like conversation responses
+* **Content generation**: models can be used to generate content, such as articles or social media posts
+
+## **Challenges and Limitations of Large Language Models**
+* **Bias and fairness**: models can perpetuate biases present in the training data
+* **Explainability**: models can be difficult to interpret and understand
+* **Robustness**: models can be vulnerable to adversarial attacks and data perturbations
+* **Scalability**: models can be computationally intensive and require large amounts of data and resources to train.
+
+──────────────────────────────────────────────────
+
+[USER]
+Compare Python vs JavaScript for AI development
+
+──────────────────────────────────────────────────
+
+[ASSISTANT]
+## **Introduction to Python and JavaScript for AI Development**
+* **Python**: a popular language for AI and machine learning development, known for its simplicity and ease of use
+* **JavaScript**: a versatile language for web development, also used for AI and machine learning development, particularly for client-side applications
+
+## **Syntax and Readability**
+* **Python**: simple and concise syntax, easy to read and write
+* **JavaScript**: more complex syntax, with a steeper learning curve
+
+## **Libraries and Frameworks**
+* **Python**:
+	+ **TensorFlow**: a popular open-source machine learning library
+	+ **Keras**: a high-level neural networks API
+	+ **Scikit-learn**: a widely used library for machine learning
+* **JavaScript**:
+	+ **TensorFlow.js**: a JavaScript version of the popular TensorFlow library
+	+ **Brain.js**: a JavaScript library for neural networks
+	+ **Synaptic.js**: a JavaScript library for neural networks
+
+## **Performance and Speed**
+* **Python**: generally faster than JavaScript for computationally intensive tasks
+* **JavaScript**: can be slower than Python due to the overhead of the JavaScript engine
+
+## **Development and Deployment**
+* **Python**:
+	+ **Easy to develop and deploy**: with frameworks like Flask and Django
+	+ **Extensive libraries**: for tasks like data processing and visualization
+* **JavaScript**:
+	+ **Client-side development**: well-suited for web-based applications
+	+ **Server-side development**: possible with frameworks like Node.js
+
+## **Data Science and Machine Learning**
+* **Python**:
+	+ **Strong support for data science**: with libraries like Pandas and NumPy
+	+ **Extensive machine learning libraries**: like Scikit-learn and TensorFlow
+* **JavaScript**:
+	+ **Limited support for data science**: compared to Python
+	+ **Growing ecosystem for machine learning**: with libraries like TensorFlow.js
+
+## **Community and Resources**
+* **Python**:
+	+ **Large and active community**: with many online resources and forums
+	+ **Extensive documentation**: for libraries and frameworks
+* **JavaScript**:
+	+ **Large and active community**: with many online resources and forums
+	+ **Growing ecosystem for AI and machine learning**: with new libraries and frameworks emerging
+
+## **Use Cases**
+* **Python**:
+	+ **Natural language processing**: with libraries like NLTK and spaCy
+	+ **Computer vision**: with libraries like OpenCV
+* **JavaScript**:
+	+ **Web-based applications**: with frameworks like React and Angular
+	+ **Client-side machine learning**: with libraries like TensorFlow.js
+
+──────────────────────────────────────────────────
+
+[USER]
+Compare Python vs JavaScript for AI development
+
+──────────────────────────────────────────────────
+
+[ASSISTANT]
+### Comparison Table
+| Feature | Python | JavaScript |
+| --- | --- | --- |
+| **Syntax** | Simple and concise | More complex |
+| **Libraries** | TensorFlow, Keras, Scikit-learn | TensorFlow.js, Brain.js, Synaptic.js |
+| **Performance** | Faster for computationally intensive tasks | Slower due to JavaScript engine overhead |
+| **Development** | Easy to develop and deploy with Flask and Django | Well-suited for client-side development with Node.js |
+| **Data Science** | Strong support with Pandas and NumPy | Limited support compared to Python |
+| **Machine Learning** | Extensive libraries like Scikit-learn and TensorFlow | Growing ecosystem with TensorFlow.js |
+| **Community** | Large and active with many online resources | Large and active with many online resources |
+| **Use Cases** | Natural language processing, computer vision | Web-based applications, client-side machine learning |
+
+### Key Differences
+* **Syntax**: Python has a simpler and more concise syntax, making it easier to read and write.
+* **Libraries**: Python has more extensive and mature libraries for AI and machine learning, while JavaScript has a growing ecosystem.
+* **Performance**: Python is generally faster for computationally intensive tasks, while JavaScript can be slower due to the overhead of the JavaScript engine.
+* **Development**: Python is easy to develop and deploy with frameworks like Flask and Django, while JavaScript is well-suited for client-side development with Node.js.
+
+### Recommendation
+Python is a better choice for AI development due to its simplicity, extensive libraries, and faster performance. However, JavaScript can be a good choice for web-based applications and client-side machine learning. Ultimately, the choice between Python and JavaScript depends on the specific needs and goals of the project.
+
+### Example Use Cases
+* **Python**: Natural language processing with NLTK and spaCy, computer vision with OpenCV.
+* **JavaScript**: Web-based applications with React and Angular, client-side machine learning with TensorFlow.js.
+
+### Advice
+* **Start with Python**: If you're new to AI development, start with Python due to its simplicity and extensive libraries.
+* **Consider JavaScript**: If you're working on a web-based application or client-side machine learning project, consider using JavaScript.
+* **Learn both**: Having knowledge of both Python and JavaScript can be beneficial for AI development, as it allows you to choose the best tool for the job.
+
+──────────────────────────────────────────────────
+
+[USER]
+Summarize this document and extract key points
+
+──────────────────────────────────────────────────
+
+[ASSISTANT]
+**Summary:**
+
+The document is a whitepaper titled "The Agentic AI Attack Surface: Autonomous Agents, Tool Misuse, and the Rise of Machine-Speed Exploitation" by Kieran Upadrasta. The paper introduces the Agentic Kill Chain, a seven-stage autonomous attack lifecycle model, and presents a governance architecture for autonomous AI agents. The author highlights the growing threat of autonomous AI agents and the need for evidence-based governance to mitigate risks. The paper also presents simulation results demonstrating the effectiveness of a five-layer Zero Trust Agent Architecture in reducing exploitation.
+
+**Key Points:**
+
+1. **Autonomous AI agents**: The paper highlights the growing threat of autonomous AI agents, which can process financial transactions, manage healthcare decisions, and govern critical national infrastructure.
+2. **Agentic Kill Chain**: The author introduces the Agentic Kill Chain, a seven-stage autonomous attack lifecycle model that extends MITRE ATLAS with three novel stages.
+3. **Agent Identity Graph**: The paper presents the Agent Identity Graph, which decomposes the 144:1 non-human identity ratio into ten governable categories.
+4. **Zero Trust Agent Architecture**: The author presents a five-layer Zero Trust Agent Architecture that achieves 89-96% exploitation reduction across 2,000 controlled trials.
+5. **Governance Model**: The paper maps regulatory obligations to auditable controls across DORA, NIS2, EU AI Act, SEC, and GDPR simultaneously.
+6. **Simulation Results**: The author presents simulation results demonstrating the effectiveness of the five-layer Zero Trust Agent Architecture in reducing exploitation.
+7. **Implementation Roadmap**: The paper provides an implementation roadmap for deploying the governance architecture in 24 weeks.
+8. **Quantified Business Case**: The author presents a quantified business case, including a 3-year net ROI of $6.9M on an $850K investment.
+
+**Recommendations:**
+
+1. **Establish defensible AI agent governance**: Organizations should establish defensible AI agent governance to mitigate risks associated with autonomous AI agents.
+2. **Deploy Zero Trust Agent Architecture**: Organizations should deploy a five-layer Zero Trust Agent Architecture to reduce exploitation.
+3. **Implement Agent Identity Graph**: Organizations should implement the Agent Identity Graph to decompose the non-human identity ratio into governable categories.
+4. **Conduct regular simulations**: Organizations should conduct regular simulations to test the effectiveness of their governance architecture.
+
+**Future Research Directions:**
+
+1. **Further research on Agentic Kill Chain**: Further research is needed to refine the Agentic Kill Chain and to develop more effective mitigation strategies.
+2. **Development of more advanced Zero Trust Agent Architectures**: More advanced Zero Trust Agent Architectures should be developed to address the evolving threat landscape.
+3. **Investigation of regulatory frameworks**: Investigation of regulatory frameworks is needed to ensure that organizations are compliant with relevant regulations.
+
+──────────────────────────────────────────────────
+
+[USER]
+Summarize this: Artificial intelligence is transforming industries worldwide. Companies are investing billions in AI research. Key areas include natural language processing, computer vision, and robotics. Challenges remain around safety, bias, and regulation.
+
+──────────────────────────────────────────────────
+
+[ASSISTANT]
+**TL;DR**
+The document discusses the Agentic AI Attack Surface, a seven-stage autonomous attack lifecycle model, and presents a governance architecture for autonomous AI agents. The author highlights the growing threat of autonomous AI agents and the need for evidence-based governance to mitigate risks. The paper also presents simulation results demonstrating the effectiveness of a five-layer Zero Trust Agent Architecture in reducing exploitation.
+
+**Key Points**
+
+1. **Autonomous AI agents**: The paper highlights the growing threat of autonomous AI agents, which can process financial transactions, manage healthcare decisions, and govern critical national infrastructure.
+2. **Agentic Kill Chain**: The author introduces the Agentic Kill Chain, a seven-stage autonomous attack lifecycle model that extends MITRE ATLAS with three novel stages.
+3. **Agent Identity Graph**: The paper presents the Agent Identity Graph, which decomposes the 144:1 non-human identity ratio into ten governable categories.
+4. **Zero Trust Agent Architecture**: The author presents a five-layer Zero Trust Agent Architecture that achieves 89-96% exploitation reduction across 2,000 controlled trials.
+5. **Governance Model**: The paper maps regulatory obligations to auditable controls across DORA, NIS2, EU AI Act, SEC, and GDPR simultaneously.
+6. **Simulation Results**: The author presents simulation results demonstrating the effectiveness of the five-layer Zero Trust Agent Architecture in reducing exploitation.
+7. **Implementation Roadmap**: The paper provides an implementation roadmap for deploying the governance architecture in 24 weeks.
+
+**What is missing or uncertain**
+
+1. **Lack of standardization**: The paper highlights the need for standardization in autonomous AI agent governance.
+2. **Insufficient regulation**: The author notes that current regulations are insufficient to address the risks associated with autonomous AI agents.
+3. **Limited understanding**: The paper highlights the limited understanding of the risks associated with autonomous AI agents and the need for further research.
+4. **Difficulty in implementation**: The author notes that implementing the governance architecture may be challenging, especially for smaller organizations.
+5. **Need for continuous monitoring**: The paper highlights the need for continuous monitoring and updating of the governance architecture to address emerging risks.
+
+──────────────────────────────────────────────────
+
+[USER]
+Extract all entities and facts: OpenAI raised $6.6B in October 2024 at a $157B valuation. Sam Altman is CEO. They have 1,800 employees and 200 million weekly active users of ChatGPT.
+
+──────────────────────────────────────────────────
+
+[ASSISTANT]
+Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kvrsw0maekr90b1aq2z5rs5t` service tier `on_demand` on tokens per minute (TPM): Limit 12000, Used 7049, Requested 7847. Please try again in 14.48s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing
+
+──────────────────────────────────────────────────
+
+[USER]
+Extract all entities and facts: OpenAI raised $6.6B in October 2024 at a $157B valuation. Sam Altman is CEO. They have 1,800 employees and 200 million weekly active users of ChatGPT.
+
+──────────────────────────────────────────────────
+
+[ASSISTANT]
+### Entities
+* **OpenAI**: a company that raised $6.6B in October 2024 at a $157B valuation
+* **Sam Altman**: CEO of OpenAI
+* **ChatGPT**: a product of OpenAI with 200 million weekly active users
+* **Kieran Upadrasta**: author of the whitepaper "The Agentic AI Attack Surface"
+* **Cyber AI Systems Inc.**: the company that published the whitepaper
+* **Entro Security**: a company that provided data on non-human identities
+* **ReliaQuest**: a company that provided data on lateral movement in AI-powered attacks
+* **Anthropic**: a company that documented the first AI-orchestrated cyberattack (GTG-1002)
+* **IBM**: a company that provided data on AI-related breaches
+
+### Facts
+* **OpenAI raised $6.6B in October 2024 at a $157B valuation**
+* **OpenAI has 1,800 employees**
+* **ChatGPT has 200 million weekly active users**
+* **The Agentic Kill Chain is a seven-stage autonomous attack lifecycle model**
+* **The Agent Identity Graph decomposes the 144:1 non-human identity ratio into ten governable categories**
+* **A five-layer Zero Trust Agent Architecture can achieve 89-96% exploitation reduction**
+* **The whitepaper presents a board-ready governance framework deployable in 24 weeks with a validated 810% three-year ROI**
+* **97% of organizations that suffered AI-related breaches lacked proper access controls**
+* **The first documented AI-orchestrated cyberattack (GTG-1002) saw an autonomous agent execute 80-90% of operations independently**
+* **Lateral movement in AI-powered attacks has collapsed from 48 minutes to 4 minutes**
+
+### Dates
+* **October 2024**: OpenAI raised $6.6B at a $157B valuation
+* **March 2026**: the whitepaper "The Agentic AI Attack Surface" was published
+* **2025**: Entro Security provided data on non-human identities
+* **2026**: ReliaQuest provided data on lateral movement in AI-powered attacks
+* **August 2026**: the deadline for DORA/EU AI Act compliance
+
+### Statistics
+* **$6.6B**: the amount of money OpenAI raised in October 2024
+* **$157B**: the valuation of OpenAI in October 2024
+* **1,800**: the number of employees at OpenAI
+* **200 million**: the number of weekly active users of ChatGPT
+* **144:1**: the ratio of non-human identities to human users
+* **97%**: the percentage of organizations that suffered AI-related breaches and lacked proper access controls
+* **89-96%**: the percentage of exploitation reduction achievable with a five-layer Zero Trust Agent Architecture
+* **810%**: the three-year ROI of the governance framework presented in the whitepaper
+* **24 weeks**: the time it takes to deploy the governance framework
+* **4 minutes**: the time it takes for lateral movement in AI-powered attacks
+* **48 minutes**: the previous time it took for lateral movement in AI-powered attacks
+* **6 minutes**: the fastest data exfiltration time
+* **85%**: the reduction in lateral movement time from 2024
+* **91%**: the percentage of former employee tokens that remain active
+* **95% CI**: the confidence interval for the data on non-human identities
