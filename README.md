@@ -5,7 +5,7 @@
 
 ## 🔗 Links
 
-- 🌐 **Live Demo:** [your-app.vercel.app](https://your-app.vercel.app)
+- 🌐 **Live Demo:** https://research-agent-ten-drab.vercel.app/
 
 
 
@@ -132,6 +132,7 @@ The Structured Report format enforces a specific output structure: **Executive S
 ### Option B — Deploy to Vercel (enables Claude)
 
 See the [Deploy to Vercel](#-deploy-to-vercel) section below.
+https://research-agent-ten-drab.vercel.app/
 
 ## 📖 How to Use
 
