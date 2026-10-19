@@ -12,3 +12,4 @@ Upload these in ResearchAI to check the prompt-injection guardrails.
 
 Try each one with **Remove suspicious text** on and off (left sidebar → Guardrails)
 and compare the answers.
+![Uploading Screenshot 2026-10-19 at 12.16.48.png…]()
